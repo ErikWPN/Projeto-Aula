@@ -4,15 +4,17 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -65,8 +67,17 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Endereço não encontrado.", Map.of()));
     }
 
+    @ExceptionHandler(TypeMismatchException.class)
+    ResponseEntity<Erro> tipoInvalido(TypeMismatchException e) {
+        return ResponseEntity.badRequest().body(new Erro("Um dos valores enviados não é válido.", Map.of()));
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<Erro> inesperado(Exception e) {
+        // Erros do próprio Spring MVC (método, tipo de conteúdo...) já trazem o status certo.
+        if (e instanceof ErrorResponse resposta) {
+            return ResponseEntity.status(resposta.getStatusCode()).body(new Erro("Requisição inválida.", Map.of()));
+        }
         log.error("Erro inesperado", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new Erro("Algo deu errado do nosso lado. Tente de novo em instantes.", Map.of()));

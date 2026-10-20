@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ApiError, api, type Reserva, type Site } from "../lib/api";
 import { brl, diaHora, linkWhatsapp, periodo } from "../lib/format";
-import { CHAVES, gravar } from "../lib/storage";
+import { CHAVES, gravar, ler } from "../lib/storage";
 import { PixPainel } from "../components/PixPainel";
 
 const TITULOS: Record<Reserva["status"], string> = {
@@ -17,14 +17,20 @@ export function ReservaPagina() {
   const [reserva, setReserva] = useState<Reserva | null>(null);
   const [site, setSite] = useState<Site | null>(null);
   const [erro, setErro] = useState<ApiError | null>(null);
+  const siteCarregado = useRef<Site | null>(null);
 
+  // O conteúdo do site vem uma vez; a atualização periódica busca só a reserva.
   const carregar = useCallback(async () => {
     try {
-      const [r, s] = await Promise.all([api.reserva(codigo), api.site()]);
+      const [r, s] = await Promise.all([api.reserva(codigo), siteCarregado.current ?? api.site()]);
+      siteCarregado.current = s;
       setReserva(r);
       setSite(s);
       setErro(null);
-      if (r.status !== "PENDENTE") gravar(CHAVES.ultimaReserva, null);
+      // Esquece a reserva lembrada na página inicial só se for esta e ela já tiver sido resolvida.
+      if (r.status !== "PENDENTE" && ler<string | null>(CHAVES.ultimaReserva, null) === r.codigo) {
+        gravar(CHAVES.ultimaReserva, null);
+      }
     } catch (e) {
       setErro(e instanceof ApiError ? e : new ApiError(0, "Não foi possível carregar a reserva."));
     }

@@ -65,6 +65,7 @@ cd frontend && npm install && npm run dev          # site em :5173, com /api apo
 | `MENTORIA_LINK_CARTAO` | opcional: link de pagamento com cartão (Mercado Pago, InfinitePay…) |
 | `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` | banco PostgreSQL em produção |
 | `PORT` | porta HTTP (padrão 8080) |
+| `FORWARD_HEADERS` | `framework` quando o site roda atrás de um proxy (Render, Railway, Nginx); `none` quando exposto direto |
 
 **Textos do site** (título, chamada, mentor, ementa, perguntas frequentes, opções de nível e de origem) ficam em `backend/src/main/resources/application.yml`, na seção `mentoria:`. Antes de divulgar, troque `cargo` do mentor, que ainda está como `[Cargo do Anderson], [anos] anos em TI`. Para usar foto, coloque a imagem em `frontend/public/` (ex.: `anderson.jpg`) e escreva `foto: /anderson.jpg`.
 
@@ -87,12 +88,12 @@ Isso sobe o site na porta 8080 e um PostgreSQL com os dados num volume. Em plata
 
 ### Só o jar
 
-Qualquer máquina com Java 21: `java -jar mentoria-1.0.0.jar`, com as variáveis de ambiente definidas. Coloque um proxy com HTTPS na frente (Caddy, Nginx ou o da plataforma). O app já entende os cabeçalhos `X-Forwarded-*`.
+Qualquer máquina com Java 21: `java -jar mentoria-1.0.0.jar`, com as variáveis de ambiente definidas. Coloque um proxy com HTTPS na frente (Caddy, Nginx ou o da plataforma) e defina `FORWARD_HEADERS=framework`, para o app enxergar o IP real de cada visitante.
 
 ## Testes
 
 ```bash
-cd backend && mvn test            # 18 testes: Pix (inclui o exemplo do manual do Banco Central), reservas, vagas, expiração, painel
+cd backend && mvn test            # 21 testes: Pix (inclui o exemplo do manual do Banco Central), reservas, vagas, expiração, painel
 cd frontend && npm test           # máscaras, validação, datas e mensagem do WhatsApp
 ./e2e/rodar.sh                    # ponta a ponta no navegador: fluxo do aluno, painel, temas, 360 px a 1280 px
 ```
@@ -114,7 +115,7 @@ docs/       especificação de design
 ## Segurança
 
 - Só `/api/admin/**` exige login (HTTP Basic, enviado pelo app a cada chamada, sem cookie de sessão).
-- No máximo 5 reservas por IP a cada 10 minutos, contra robôs.
+- No máximo 10 reservas por IP a cada 10 minutos, contra robôs (com folga para uma turma reservando do mesmo Wi-Fi).
 - Cabeçalhos de segurança, incluindo Content Security Policy sem scripts de terceiros. A fonte é servida pelo próprio site.
 - O CSV exportado protege contra fórmulas maliciosas em planilhas.
 

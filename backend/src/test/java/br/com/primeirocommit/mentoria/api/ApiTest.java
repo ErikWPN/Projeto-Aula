@@ -179,7 +179,7 @@ class ApiTest {
 
     @Test
     void limitaReservasSeguidasDoMesmoIp() throws Exception {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             reservar("ferias").andExpect(status().isCreated());
         }
         reservar("ferias").andExpect(status().isTooManyRequests());
@@ -217,13 +217,11 @@ class ApiTest {
         mvc.perform(post("/api/admin/reservas/" + b + "/cancelar").with(httpBasic("admin", "teste")))
                 .andExpect(jsonPath("$.status").value("CANCELADA"));
 
-        mvc.perform(get("/api/admin/reservas").param("status", "PAGA").with(httpBasic("admin", "teste")))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].codigo").value(a))
-                .andExpect(jsonPath("$[0].email").value("maria@gmail.com"))
-                .andExpect(jsonPath("$[0].whatsapp").value("5511912345678"));
-        mvc.perform(get("/api/admin/reservas").param("q", "91234").with(httpBasic("admin", "teste")))
-                .andExpect(jsonPath("$", hasSize(2)));
+        mvc.perform(get("/api/admin/reservas").with(httpBasic("admin", "teste")))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[?(@.codigo == '" + a + "')].status").value("PAGA"))
+                .andExpect(jsonPath("$[?(@.codigo == '" + a + "')].email").value("maria@gmail.com"))
+                .andExpect(jsonPath("$[?(@.codigo == '" + a + "')].whatsapp").value("5511912345678"));
 
         mvc.perform(get("/api/admin/resumo").with(httpBasic("admin", "teste")))
                 .andExpect(jsonPath("$.pagas").value(1))
@@ -263,6 +261,47 @@ class ApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.situacao").value("ENCERRADA"));
         mvc.perform(get("/api/site")).andExpect(jsonPath("$.turmas", hasSize(3)));
+    }
+
+    @Test
+    void confirmarReservaVencidaNaoLotaATurmaAlemDoLimite() throws Exception {
+        turmas.findById("piloto").orElseThrow().setVagas(1);
+        String vencida = codigoDe(reservar("piloto"));
+        relogio.avancar(Duration.ofHours(25));
+        reservar("piloto").andExpect(status().isCreated());
+
+        mvc.perform(post("/api/admin/reservas/" + vencida + "/confirmar").with(httpBasic("admin", "teste")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensagem", startsWith("A Turma piloto está cheia")));
+
+        turmas.findById("piloto").orElseThrow().setVagas(2);
+        mvc.perform(post("/api/admin/reservas/" + vencida + "/confirmar").with(httpBasic("admin", "teste")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("PAGA"));
+    }
+
+    @Test
+    void errosDeRequisicaoMantemOStatusCerto() throws Exception {
+        mvc.perform(post("/api/reservas").contentType(MediaType.TEXT_PLAIN).content("oi"))
+                .andExpect(status().isUnsupportedMediaType());
+        mvc.perform(put("/api/reservas/PCZZZZZZZZ"))
+                .andExpect(status().isMethodNotAllowed());
+        mvc.perform(post("/api/reservas").contentType(MediaType.APPLICATION_JSON).content("{quebrado"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/nao-existe"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Endereço não encontrado."));
+    }
+
+    @Test
+    void naoConfiaEmXForwardedForPorPadrao() throws Exception {
+        for (int i = 0; i < 10; i++) {
+            reservar("ferias");
+        }
+        mvc.perform(post("/api/reservas").header("X-Forwarded-For", "203.0.113.9")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo("ferias", "Maria Souza", "maria@gmail.com", "11912345678")))
+                .andExpect(status().isTooManyRequests());
     }
 
     @Test

@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import br.com.primeirocommit.mentoria.api.Views.AdminReservaView;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -78,21 +76,9 @@ public class AdminController {
     }
 
     @GetMapping("/reservas")
-    public List<AdminReservaView> listar(@RequestParam(required = false) StatusReserva status,
-            @RequestParam(required = false) String turma, @RequestParam(required = false) String q) {
+    public List<AdminReservaView> listar() {
         Instant agora = clock.instant();
-        String busca = q == null ? "" : q.trim().toLowerCase(Locale.ROOT);
-        String digitos = busca.replaceAll("\\D", "");
-        return reservas.listar().stream()
-                .map(r -> AdminReservaView.de(r, agora))
-                .filter(r -> status == null || r.status() == status)
-                .filter(r -> turma == null || turma.isBlank() || r.turmaId().equals(turma))
-                .filter(r -> busca.isEmpty()
-                        || r.nome().toLowerCase(Locale.ROOT).contains(busca)
-                        || r.email().contains(busca)
-                        || r.codigo().toLowerCase(Locale.ROOT).contains(busca)
-                        || (!digitos.isEmpty() && r.whatsapp().contains(digitos)))
-                .toList();
+        return reservas.listar().stream().map(r -> AdminReservaView.de(r, agora)).toList();
     }
 
     @PostMapping("/reservas/{codigo}/confirmar")

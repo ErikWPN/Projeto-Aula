@@ -79,10 +79,23 @@ public class ReservaService {
                         "Não encontramos a reserva " + limpo + ". Confira o código."));
     }
 
+    /**
+     * Confirma o pagamento. Uma reserva vencida já devolveu a vaga, então só volta a ocupar
+     * se a turma ainda tiver lugar (com a turma travada, como na criação).
+     */
     @Transactional
     public Reserva confirmar(String codigo) {
         Reserva r = buscar(codigo);
-        r.confirmarPagamento(clock.instant());
+        Instant agora = clock.instant();
+        if (r.statusEm(agora) == StatusReserva.EXPIRADA) {
+            Turma turma = turmas.findParaReservar(r.getTurma().getId()).orElseThrow();
+            long ocupadas = reservas.contarOcupadas(turma.getId(), agora);
+            if (ocupadas >= turma.getVagas()) {
+                throw new ApiException(HttpStatus.CONFLICT, "A " + turma.getNome() + " está cheia ("
+                        + ocupadas + " de " + turma.getVagas() + " vagas). Aumente as vagas da turma antes de confirmar.");
+            }
+        }
+        r.confirmarPagamento(agora);
         return r;
     }
 

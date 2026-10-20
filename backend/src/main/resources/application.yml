@@ -1,6 +1,8 @@
 server:
   port: ${PORT:8080}
-  forward-headers-strategy: framework
+  # Só ative (FORWARD_HEADERS=framework) atrás de um proxy que reescreve X-Forwarded-*
+  # (Render, Railway, Nginx...). Exposto direto, qualquer um poderia forjar o próprio IP.
+  forward-headers-strategy: ${FORWARD_HEADERS:none}
   compression:
     enabled: true
   servlet:

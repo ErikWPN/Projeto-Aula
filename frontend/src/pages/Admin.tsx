@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   ApiError,
   adminApi,
@@ -155,8 +155,10 @@ function Painel({ auth, onSair }: { auth: string; onSair: () => void }) {
       const a = document.createElement("a");
       a.href = url;
       a.download = `reservas-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast("Planilha exportada");
     } catch (e) {
       tratar(e);
@@ -264,12 +266,14 @@ function ListaReservas({
     if (turma && r.turmaId !== turma) return false;
     const q = busca.trim().toLowerCase();
     if (!q) return true;
+    // Só compara com o telefone quando a busca parece um telefone, para "ana2@gmail.com" não achar todo mundo.
+    const pareceTelefone = /^[\d\s()+-]+$/.test(q);
     const digitos = q.replace(/\D/g, "");
     return (
       r.nome.toLowerCase().includes(q) ||
       r.email.includes(q) ||
       r.codigo.toLowerCase().includes(q) ||
-      (digitos.length > 0 && r.whatsapp.includes(digitos))
+      (pareceTelefone && digitos.length >= 3 && r.whatsapp.includes(digitos))
     );
   });
 
@@ -623,6 +627,7 @@ function Dialogo({
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const idTitulo = useId();
 
   useEffect(() => {
     const d = ref.current;
@@ -632,9 +637,9 @@ function Dialogo({
   }, [aberto]);
 
   return (
-    <dialog ref={ref} className="dialogo" aria-labelledby="dialogo-titulo" onClose={onFechar} onCancel={onFechar}>
+    <dialog ref={ref} className="dialogo" aria-labelledby={idTitulo} onClose={onFechar} onCancel={onFechar}>
       <div className="dialogo__cabeca">
-        <h2 id="dialogo-titulo">{titulo}</h2>
+        <h2 id={idTitulo}>{titulo}</h2>
         <button type="button" className="dialogo__fechar" aria-label="Fechar" onClick={onFechar}>
           ×
         </button>

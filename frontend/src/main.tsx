@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, createMemoryRouter, RouterProvider } from "react-router";
 import "@fontsource-variable/recursive/full.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
@@ -11,8 +11,9 @@ import { Inicio } from "./pages/Inicio";
 import { ReservaPagina } from "./pages/ReservaPagina";
 import { Admin } from "./pages/Admin";
 import { NaoEncontrada } from "./pages/NaoEncontrada";
+import { MODO_APRESENTACAO } from "./lib/api";
 
-const router = createBrowserRouter([
+const rotas = [
   {
     element: <Layout />,
     children: [
@@ -22,7 +23,10 @@ const router = createBrowserRouter([
       { path: "*", element: <NaoEncontrada /> },
     ],
   },
-]);
+];
+
+// Na apresentação o site é uma página única hospedada: a navegação fica em memória.
+const router = MODO_APRESENTACAO ? createMemoryRouter(rotas) : createBrowserRouter(rotas);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

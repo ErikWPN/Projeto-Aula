@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router";
-import { ApiError, api, type Site } from "../lib/api";
+import { Link, useLocation } from "react-router";
+import { ApiError, MODO_APRESENTACAO, api, type Site } from "../lib/api";
 import { brl, telefoneLegivel } from "../lib/format";
 import { CHAVES, ler } from "../lib/storage";
 import { Fluxograma, type Caminho } from "../components/Fluxograma";
@@ -12,6 +12,7 @@ export function Inicio() {
   const [erro, setErro] = useState<string | null>(null);
   const [caminho, setCaminho] = useState<Caminho>(null);
   const [ultima] = useState<string | null>(() => ler<string | null>(CHAVES.ultimaReserva, null));
+  const { hash } = useLocation();
 
   const carregar = useCallback(async () => {
     try {
@@ -30,10 +31,9 @@ export function Inicio() {
 
   // Ao abrir /#agendar vindo de outra página, rola até o agendamento quando ele existir.
   useEffect(() => {
-    if (site && window.location.hash) {
-      document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
-    }
-  }, [site]);
+    const alvo = hash || window.location.hash;
+    if (site && alvo) document.getElementById(alvo.slice(1))?.scrollIntoView();
+  }, [site, hash]);
 
   if (erro && !site) {
     return (
@@ -206,6 +206,11 @@ export function Inicio() {
           <p>
             Dúvidas pelo WhatsApp: <span className="mono">{telefoneLegivel(site.whatsapp)}</span>
           </p>
+          {MODO_APRESENTACAO && (
+            <p>
+              <Link to="/admin">Ver o painel do mentor</Link>
+            </p>
+          )}
         </div>
       </footer>
     </>

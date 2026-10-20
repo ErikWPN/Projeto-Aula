@@ -12,6 +12,8 @@ import {
 import { brl, diaHora, linkWhatsapp, periodo, telefoneLegivel } from "../lib/format";
 import { useToast } from "../components/Toast";
 import { CHAVES } from "../lib/storage";
+import { MODO_APRESENTACAO } from "../lib/api";
+import { SENHA_DEMO, recomecarApresentacao } from "../lib/demo";
 
 const NOMES_STATUS: Record<StatusReserva, string> = {
   PENDENTE: "Aguardando Pix",
@@ -78,6 +80,11 @@ function Login({ onEntrar }: { onEntrar: (auth: string) => void }) {
     <section className="wrap login" aria-labelledby="titulo-login">
       <h1 id="titulo-login">Painel da mentoria</h1>
       <p className="lead">Entre para conferir pagamentos e cuidar das turmas.</p>
+      {MODO_APRESENTACAO && (
+        <p className="aviso">
+          Na apresentação, o usuário é <strong>admin</strong> e a senha é <strong className="mono">{SENHA_DEMO}</strong>.
+        </p>
+      )}
       <form className="login__form" onSubmit={enviar}>
         <div className="campo">
           <label htmlFor="l-usuario">Usuário</label>
@@ -170,9 +177,23 @@ function Painel({ auth, onSair }: { auth: string; onSair: () => void }) {
       <div className="admin__topo">
         <h1 id="titulo-admin">Painel da mentoria</h1>
         <div className="acoes">
-          <button type="button" className="btn btn--claro btn--pequeno" onClick={exportar}>
-            Exportar planilha
-          </button>
+          {MODO_APRESENTACAO ? (
+            <button
+              type="button"
+              className="btn btn--claro btn--pequeno"
+              onClick={() => {
+                recomecarApresentacao();
+                void recarregar();
+                toast("Apresentação recomeçada");
+              }}
+            >
+              Recomeçar apresentação
+            </button>
+          ) : (
+            <button type="button" className="btn btn--claro btn--pequeno" onClick={exportar}>
+              Exportar planilha
+            </button>
+          )}
           <button type="button" className="link-botao" onClick={onSair}>
             Sair
           </button>
@@ -209,7 +230,7 @@ function Painel({ auth, onSair }: { auth: string; onSair: () => void }) {
           </div>
         </dl>
       )}
-      {resumo?.demo && (
+      {resumo?.demo && !MODO_APRESENTACAO && (
         <p className="aviso">
           <strong>Modo demonstração.</strong> Defina PIX_CHAVE, PIX_NOME e PIX_CIDADE para gerar o Pix de verdade.
         </p>

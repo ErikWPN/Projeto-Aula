@@ -1,3 +1,11 @@
+import { ApiError } from "./erro";
+import { demoAdminApi, demoApi } from "./demo";
+
+export { ApiError };
+
+/** Modo apresentação: tudo roda no navegador, sem servidor (npm run build:demo). */
+export const MODO_APRESENTACAO = import.meta.env.VITE_DEMO === "1";
+
 export type Situacao = "ABERTA" | "ESGOTADA" | "ENCERRADA";
 export type StatusReserva = "PENDENTE" | "PAGA" | "EXPIRADA" | "CANCELADA";
 
@@ -102,16 +110,6 @@ export interface Resumo {
 
 export type TurmaForm = Omit<AdminTurma, "ocupadas" | "situacao">;
 
-/** Erro com a mensagem do servidor e, quando houver, a mensagem de cada campo. */
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-    public campos: Record<string, string> = {},
-  ) {
-    super(message);
-  }
-}
 
 async function pedir<T>(url: string, init: RequestInit = {}, auth?: string): Promise<T> {
   const headers: Record<string, string> = { Accept: "application/json" };
@@ -135,7 +133,7 @@ async function pedir<T>(url: string, init: RequestInit = {}, auth?: string): Pro
   return resp.json() as Promise<T>;
 }
 
-export const api = {
+const servidorApi = {
   site: () => pedir<Site>("/api/site"),
   reservar: (dados: NovaReserva) => pedir<Reserva>("/api/reservas", { method: "POST", body: JSON.stringify(dados) }),
   reserva: (codigo: string) => pedir<Reserva>("/api/reservas/" + encodeURIComponent(codigo)),
@@ -148,7 +146,7 @@ export function credenciais(usuario: string, senha: string) {
   return btoa(bin);
 }
 
-export const adminApi = (auth: string) => ({
+const servidorAdminApi = (auth: string) => ({
   sessao: () => pedir<{ usuario: string }>("/api/admin/sessao", {}, auth),
   resumo: () => pedir<Resumo>("/api/admin/resumo", {}, auth),
   reservas: () => pedir<AdminReserva[]>("/api/admin/reservas", {}, auth),
@@ -166,3 +164,6 @@ export const adminApi = (auth: string) => ({
     return resp.blob();
   },
 });
+
+export const api = MODO_APRESENTACAO ? demoApi : servidorApi;
+export const adminApi: typeof servidorAdminApi = MODO_APRESENTACAO ? demoAdminApi : servidorAdminApi;

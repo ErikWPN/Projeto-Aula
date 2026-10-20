@@ -22,7 +22,9 @@ RUN addgroup -S app && adduser -S app -G app && mkdir -p /app/data && chown app:
 COPY --from=backend /app/backend/target/mentoria-*.jar /app/mentoria.jar
 USER app
 ENV PORT=8080
+# Cabe em servidores pequenos (512 MB, como o plano gratuito do Render). Sobrescreva JAVA_OPTS se tiver mais memória.
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=60 -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xss512k -XX:ReservedCodeCacheSize=48m"
 EXPOSE 8080
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=90s \
   CMD wget -qO- http://localhost:${PORT}/actuator/health || exit 1
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "/app/mentoria.jar"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/mentoria.jar"]

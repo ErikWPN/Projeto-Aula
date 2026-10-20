@@ -1,0 +1,29 @@
+# Blueprint do Render: cria o site a partir do Dockerfile no plano gratuito.
+# O banco fica no Neon (gratuito e permanente). Veja "Publicar de graça" no README.
+services:
+  - type: web
+    name: primeiro-commit
+    runtime: docker
+    plan: free
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /actuator/health
+    envVars:
+      # Cole a "connection string" do Neon (postgresql://...). O app converte sozinho.
+      - key: DATABASE_URL
+        sync: false
+      # Senha do painel /admin, gerada pelo Render. Veja em Environment depois de criar.
+      - key: ADMIN_SENHA
+        generateValue: true
+      # Enquanto a chave tiver "exemplo", o site fica em modo demonstração.
+      - key: PIX_CHAVE
+        sync: false
+      - key: PIX_NOME
+        sync: false
+      - key: PIX_CIDADE
+        value: Sao Paulo
+      - key: MENTORIA_WHATSAPP
+        sync: false
+      # O Render fica na frente do app como proxy com HTTPS.
+      - key: FORWARD_HEADERS
+        value: framework

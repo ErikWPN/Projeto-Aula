@@ -17,6 +17,9 @@ spring:
     url: ${DATABASE_URL:jdbc:h2:file:./data/mentoria}
     username: ${DATABASE_USER:sa}
     password: ${DATABASE_PASSWORD:}
+    hikari:
+      # Bancos gratuitos (Neon, Supabase) aceitam poucas conexões.
+      maximum-pool-size: ${DB_POOL:5}
   jpa:
     open-in-view: false
     hibernate:

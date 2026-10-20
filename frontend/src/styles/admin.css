@@ -1,0 +1,389 @@
+/* Painel: denso e quieto. As cores fortes ficam só para estado e ação. */
+
+.login {
+  display: grid;
+  gap: 18px;
+  max-width: 440px;
+  padding-block: clamp(40px, 8vw, 96px);
+}
+
+.login h1 {
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.8rem);
+}
+
+.login__form {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  background: var(--giz);
+  border: 2px solid var(--grafite);
+  border-radius: 12px;
+  box-shadow: var(--sombra);
+}
+
+.admin {
+  display: grid;
+  gap: 22px;
+  padding-block: 32px 64px;
+}
+
+.admin__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.admin__topo h1 {
+  font-size: clamp(1.8rem, 1.3rem + 2vw, 2.5rem);
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  border: 2px solid var(--grafite);
+  border-radius: 10px;
+  background: var(--giz);
+  overflow: hidden;
+}
+
+.numeros > div {
+  display: grid;
+  gap: 2px;
+  padding: 16px 18px;
+}
+
+.numeros > div + div {
+  border-left: 1px solid var(--linha-forte);
+}
+
+.numeros dt {
+  font-weight: 650;
+  color: var(--grafite-suave);
+  font-size: 0.92rem;
+}
+
+.numeros dd {
+  margin: 0;
+  font-size: var(--t3);
+  font-weight: 800;
+  font-variation-settings: var(--casual);
+  line-height: 1.1;
+}
+
+.numeros dd.numeros__extra {
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-variation-settings: var(--linear);
+  color: var(--grafite-suave);
+}
+
+@media (max-width: 760px) {
+  .numeros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .numeros > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .numeros > div:nth-child(n + 3) {
+    border-top: 1px solid var(--linha-forte);
+  }
+}
+
+.abas {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--grafite);
+}
+
+.abas button {
+  min-height: 46px;
+  padding: 10px 18px;
+  border: 2px solid transparent;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--grafite-suave);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: -2px;
+}
+
+.abas button[aria-selected="true"] {
+  background: var(--giz);
+  color: var(--grafite);
+  border-color: var(--grafite);
+  border-bottom: 2px solid var(--giz);
+}
+
+[role="tabpanel"] {
+  display: grid;
+  gap: 16px;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px 16px;
+}
+
+@media (max-width: 760px) {
+  .filtros {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.confirmacao {
+  display: grid;
+  gap: 10px;
+  background: var(--ok-claro);
+  border-color: var(--ok);
+}
+
+.vazio {
+  padding: 28px;
+  border: 2px dashed var(--linha-forte);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--grafite-suave);
+}
+
+.tabela-rolagem {
+  overflow-x: auto;
+  border: 2px solid var(--grafite);
+  border-radius: 10px;
+  background: var(--giz);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabela th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--grafite);
+  white-space: nowrap;
+}
+
+.tabela td[data-rotulo="Aluno"] {
+  min-width: 15rem;
+}
+
+.tabela td {
+  padding: 12px 14px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--linha);
+}
+
+.tabela tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela__sub {
+  display: block;
+  color: var(--grafite-suave);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+a.tabela__sub {
+  color: var(--lousa);
+}
+
+.tabela__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px 10px;
+}
+
+/* No celular a tabela vira uma lista de fichas. */
+@media (max-width: 760px) {
+  .tabela-rolagem {
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .tabela thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .tabela,
+  .tabela tbody,
+  .tabela tr,
+  .tabela td {
+    display: block;
+  }
+
+  .tabela tr {
+    margin-bottom: 14px;
+    padding: 6px 0;
+    border: 2px solid var(--grafite);
+    border-radius: 10px;
+    background: var(--giz);
+  }
+
+  .tabela td {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 10px;
+    padding: 8px 14px;
+    border: 0;
+  }
+
+  .tabela td[data-rotulo]::before {
+    content: attr(data-rotulo);
+    color: var(--grafite-suave);
+    font-weight: 650;
+  }
+
+  .tabela td.tabela__acoes {
+    display: flex;
+    justify-content: flex-start;
+    border-top: 1px dashed var(--linha-forte);
+    margin-top: 6px;
+    padding-top: 12px;
+  }
+}
+
+.admin__acoes-turmas {
+  justify-content: flex-end;
+}
+
+.lista-turmas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-turmas li {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 18px;
+  border: 2px solid var(--grafite);
+  border-radius: 10px;
+  background: var(--giz);
+}
+
+.lista-turmas__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.lista-turmas li .link-botao {
+  justify-self: start;
+}
+
+.ocupacao {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--grafite-suave);
+}
+
+.ocupacao__barra {
+  display: block;
+  height: 10px;
+  border: 1.5px solid var(--grafite);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--postit) var(--pct), transparent var(--pct));
+}
+
+.dialogo {
+  width: min(640px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 2px solid var(--grafite);
+  border-radius: 14px;
+  background: var(--giz);
+  color: var(--grafite);
+  box-shadow: 8px 8px 0 var(--sombra-cor);
+}
+
+.dialogo::backdrop {
+  background: rgba(14, 28, 23, 0.55);
+}
+
+.dialogo > :not(.dialogo__cabeca) {
+  padding: 0 22px 22px;
+}
+
+.dialogo > p {
+  margin-bottom: 4px;
+}
+
+.dialogo__cabeca {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px 14px;
+}
+
+.dialogo__cabeca h2 {
+  font-size: var(--t2);
+}
+
+.dialogo__fechar {
+  width: 44px;
+  height: 44px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--grafite);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialogo__fechar:hover {
+  border-color: var(--grafite);
+}
+
+.form-turma {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 520px) {
+  .form-turma {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.caixa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.caixa input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--lousa);
+}

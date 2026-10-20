@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:teste;DB_CLOSE_DELAY=-1
+mentoria:
+  admin:
+    usuario: admin
+    senha: teste
+  expiracao-intervalo: PT1H

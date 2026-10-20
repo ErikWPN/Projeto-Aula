@@ -1,0 +1,86 @@
+/*
+ * Tokens do Primeiro Commit.
+ * Claro: papel de caderno com tinta de lousa. Escuro: a própria lousa, com giz amarelo.
+ */
+:root {
+  --papel: #eef3ee;
+  --giz: #ffffff;
+  --grafite: #1e2a26;
+  --grafite-suave: #4a5a53;
+  --lousa: #1d5c4a;
+  --lousa-tinta: #ffffff;
+  --lousa-clara: rgba(29, 92, 74, 0.09);
+  --postit: #f4b63f;
+  --postit-claro: #fdf0cf;
+  --linha: #c9d6cd;
+  --linha-forte: #93a89c;
+  --erro: #b5303c;
+  --erro-claro: #fbe9eb;
+  --ok: #1d6b3f;
+  --ok-claro: #e2f2e7;
+  --sombra-cor: #1e2a26;
+  --sombra: 3px 3px 0 var(--sombra-cor);
+  --sombra-leve: 2px 2px 0 var(--linha-forte);
+
+  --fonte: "Recursive Variable", "Recursive", ui-sans-serif, system-ui, sans-serif;
+  --casual: "CASL" 1, "MONO" 0;
+  --linear: "CASL" 0, "MONO" 0;
+  --mono: "CASL" 0, "MONO" 1;
+
+  /* Escala modular 1.25 (terça maior) */
+  --t-1: 0.8rem;
+  --t0: 1rem;
+  --t1: 1.25rem;
+  --t2: 1.5625rem;
+  --t3: 1.953rem;
+  --t4: 2.441rem;
+  --t5: clamp(2.3rem, 1.4rem + 4.2vw, 4.2rem);
+
+  --medida: 68ch;
+  --largura: 1120px;
+  --raio: 8px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papel: #17322b;
+    --giz: #1f3e35;
+    --grafite: #eaf2ec;
+    --grafite-suave: #b3c7bc;
+    --lousa: #f4c25b;
+    --lousa-tinta: #17322b;
+    --lousa-clara: rgba(244, 194, 91, 0.12);
+    --postit: #f4c25b;
+    --postit-claro: rgba(244, 194, 91, 0.16);
+    --linha: #2f5446;
+    --linha-forte: #4c7666;
+    --erro: #ff8f98;
+    --erro-claro: rgba(255, 143, 152, 0.12);
+    --ok: #86d9a5;
+    --ok-claro: rgba(134, 217, 165, 0.12);
+    --sombra-cor: #0b1c17;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --papel: #17322b;
+  --giz: #1f3e35;
+  --grafite: #eaf2ec;
+  --grafite-suave: #b3c7bc;
+  --lousa: #f4c25b;
+  --lousa-tinta: #17322b;
+  --lousa-clara: rgba(244, 194, 91, 0.12);
+  --postit: #f4c25b;
+  --postit-claro: rgba(244, 194, 91, 0.16);
+  --linha: #2f5446;
+  --linha-forte: #4c7666;
+  --erro: #ff8f98;
+  --erro-claro: rgba(255, 143, 152, 0.12);
+  --ok: #86d9a5;
+  --ok-claro: rgba(134, 217, 165, 0.12);
+  --sombra-cor: #0b1c17;
+  color-scheme: dark;
+}

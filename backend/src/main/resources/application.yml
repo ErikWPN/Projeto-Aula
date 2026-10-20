@@ -25,7 +25,8 @@ spring:
     resources:
       cache:
         cachecontrol:
-          max-age: 1h
+          # index.html e demais arquivos sem hash: o navegador sempre confere se mudou.
+          no-cache: true
 
 management:
   endpoints:

@@ -1,0 +1,33 @@
+# Site + PostgreSQL. Copie .env.example para .env e preencha antes de subir:
+#   docker compose up -d --build
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/mentoria
+      DATABASE_USER: mentoria
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no .env}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mentoria
+      POSTGRES_USER: mentoria
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no .env}
+    volumes:
+      - dados:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mentoria -d mentoria"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  dados:

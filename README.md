@@ -1,71 +1,124 @@
-# Site da mentoria (GitHub Pages)
+# Primeiro Commit: site e reservas da mentoria
 
-Site estático para apresentar a mentoria, escolher a turma, gerar o Pix com valor e código da reserva e enviar o comprovante pelo WhatsApp.
+Site da mentoria de TI básica e lógica de programação. Mostra as turmas, faz a reserva, gera o Pix com o valor e o código da reserva e oferece um painel para o mentor conferir pagamentos e cuidar das turmas.
 
-**Para quem é:** quem vai publicar e manter o site (você). Não precisa saber programar para editar `config.js`.
+- **Backend:** Java 21 e Spring Boot 4.1 (API, banco, Pix, painel protegido por senha).
+- **Frontend:** React 19, Vite e TypeScript (página pública, página da reserva, painel).
+- **Entrega:** um único `.jar` com tudo dentro, ou uma imagem Docker com PostgreSQL.
 
-## Arquivos
+## O que o site faz
 
-| Arquivo | Para que serve |
-| --- | --- |
-| `index.html` | A página. Não precisa mexer. |
-| `config.js` | Nome, mentor, turmas, preços, ementa, FAQ, chave Pix e WhatsApp. **Edite só este.** |
-| `README.md` | Este guia. |
+**Para o aluno**
 
-## 1. Configurar
+1. Escolhe a turma. Turmas encerradas ou esgotadas aparecem desabilitadas e dizem o motivo.
+2. Preenche nome, e-mail, WhatsApp, nível e como conheceu a mentoria. A validação explica como corrigir cada campo, e o que foi digitado fica salvo se a página recarregar.
+3. Recebe o Pix: QR code, "copia e cola", resumo e um botão que abre o WhatsApp com a mensagem pronta (código, turma, nome e valor).
+4. Acompanha a reserva em `/reserva/CODIGO`. A página mostra se o pagamento está pendente, se a vaga foi confirmada ou se a reserva venceu.
 
-Abra `config.js` e troque:
+**Para o mentor** (em `/admin`)
 
-1. `whatsapp`: número que recebe os comprovantes, só dígitos com 55 + DDD (ex.: `5511912345678`).
-2. `pix.chave`, `pix.nomeRecebedor`, `pix.cidade`: dados da conta que recebe. Enquanto a chave tiver a palavra "exemplo", o site mostra um aviso de demonstração e um selo "não pague" no QR code.
-3. `turmas`: datas no formato `AAAA-MM-DD`, `vagas` e `preco`. Turmas com data final no passado aparecem como "Encerrada"; com `vagas: 0`, como "Esgotada".
-4. `titulo`, `chamada`, `mentor`, `ementa`, `faq`: textos da página. No `titulo`, o trecho entre `*asteriscos*` aparece com destaque. Para usar foto, envie a imagem para o repositório e ponha o nome do arquivo em `mentor.foto`.
-5. Opcional: `linkCartao` com um link de pagamento do Mercado Pago, InfinitePay ou similar.
+- Números do dia: reservas aguardando Pix, pagas, receita, vagas livres.
+- Lista de reservas com busca e filtros. Um botão confirma o pagamento e já oferece a mensagem de confirmação para o aluno no WhatsApp.
+- Cancelamento com confirmação.
+- Exportação para planilha (CSV que abre no Excel e no Google Sheets).
+- Criação e edição de turmas: datas, horário, vagas, preço, selo e se a turma aparece no site.
 
-**Teste o Pix antes de divulgar:** coloque uma turma de teste com `preco: 1`, gere o pagamento e pague pelo app do banco. Confira se o nome do recebedor aparece certo.
+**Regras de vaga**
 
-## 2. Publicar no GitHub Pages
+- Uma reserva segura a vaga por 24 horas (configurável). Se o pagamento não for confirmado nesse prazo, a vaga volta para a turma.
+- Duas pessoas não conseguem pegar a mesma última vaga, porque o servidor trava a turma no momento da reserva.
+- As inscrições fecham no dia do primeiro encontro.
 
-1. Crie um repositório público no GitHub (ex.: `mentoria`).
-2. Clique em **Add file → Upload files**, envie `index.html`, `config.js` e `README.md` e confirme com **Commit changes**.
-3. Vá em **Settings → Pages**. Em *Build and deployment*, escolha **Deploy from a branch**, branch `main`, pasta `/ (root)` e salve.
-4. Em 1 a 2 minutos o site fica em `https://SEU-USUARIO.github.io/mentoria/`.
+**Modo demonstração.** Enquanto a chave Pix tiver a palavra `exemplo`, o site avisa que é demonstração e põe o selo "não pague" sobre o QR code.
 
-Para atualizar vagas ou preço depois, edite `config.js` direto no GitHub (ícone de lápis) e faça commit. O site atualiza sozinho em cerca de 1 minuto.
+## Rodar no seu computador
 
-Domínio próprio (opcional): em **Settings → Pages → Custom domain**, informe o domínio e crie um registro CNAME apontando para `SEU-USUARIO.github.io` no provedor do domínio.
+Pré-requisitos: Java 21, Maven 3.9 e Node 20 ou mais novo.
 
-## 3. Opcional: guardar as reservas numa planilha
-
-Sem isso, as reservas chegam só pelo WhatsApp. Com isso, cada reserva vira uma linha no Google Sheets.
-
-1. Crie uma planilha no Google Sheets e abra **Extensões → Apps Script**.
-2. Apague o conteúdo e cole:
-
-```js
-function doPost(e) {
-  var aba = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-  if (aba.getLastRow() === 0) {
-    aba.appendRow(["Criado em", "Código", "Turma", "Valor", "Nome", "E-mail", "WhatsApp", "Nível", "Origem", "Pago?"]);
-  }
-  var d = JSON.parse(e.postData.contents);
-  aba.appendRow([d.criadoEm, d.codigo, d.turma, d.valor, d.nome, d.email, d.whatsapp, d.nivel, d.origem, "não"]);
-  return ContentService.createTextOutput("ok");
-}
+```bash
+./build.sh                                   # testa e gera backend/target/mentoria-1.0.0.jar
+ADMIN_SENHA=uma-senha java -jar backend/target/mentoria-1.0.0.jar
 ```
 
-3. Clique em **Implantar → Nova implantação → Tipo: App da Web**. Executar como: *Eu*. Quem pode acessar: *Qualquer pessoa*. Autorize.
-4. Copie a URL que termina em `/exec` e cole em `registroUrl` no `config.js`.
+Abra http://localhost:8080. O painel fica em http://localhost:8080/admin (usuário `admin`).
 
-Quando o comprovante chegar no WhatsApp, procure o código da reserva na planilha e marque "Pago?" como "sim".
+Sem `ADMIN_SENHA`, o servidor cria uma senha provisória e a mostra no log ao iniciar. Sem `DATABASE_URL`, os dados ficam num banco H2 na pasta `data/`.
 
-## Detalhes
+### Desenvolvimento com recarga automática
 
-- Tema claro e escuro: segue o sistema do visitante, e o botão de lua no topo alterna e lembra a escolha.
-- O gerador de QR code está embutido no `index.html`, então o Pix funciona mesmo se algum CDN cair.
+Em dois terminais:
 
-## Limites deste site
+```bash
+cd backend && ADMIN_SENHA=dev mvn spring-boot:run   # API em :8080
+cd frontend && npm install && npm run dev          # site em :5173, com /api apontando para :8080
+```
 
-- O pagamento é conferido à mão: o site gera o Pix, mas não tem como saber sozinho que ele foi pago. Por isso o comprovante vai pelo WhatsApp.
-- O número de vagas é o que está em `config.js`. Diminua manualmente a cada pagamento confirmado.
-- Para confirmação automática seria preciso um checkout com servidor (Mercado Pago, Asaas, Stripe). O campo `linkCartao` já aceita um link desses.
+## Configurar
+
+**Dados sensíveis e de contato** ficam em variáveis de ambiente. Copie `.env.example` para `.env` e preencha:
+
+| Variável | Para que serve |
+| --- | --- |
+| `ADMIN_SENHA` | senha do painel `/admin` (usuário `admin`, ou `ADMIN_USUARIO`) |
+| `PIX_CHAVE`, `PIX_NOME`, `PIX_CIDADE` | conta que recebe. O nome vai como aparece no banco (até 25 letras) e a cidade até 15 letras |
+| `MENTORIA_WHATSAPP` | número que recebe os comprovantes: 55 + DDD + número, só dígitos |
+| `MENTORIA_LINK_CARTAO` | opcional: link de pagamento com cartão (Mercado Pago, InfinitePay…) |
+| `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` | banco PostgreSQL em produção |
+| `PORT` | porta HTTP (padrão 8080) |
+
+**Textos do site** (título, chamada, mentor, ementa, perguntas frequentes, opções de nível e de origem) ficam em `backend/src/main/resources/application.yml`, na seção `mentoria:`. Antes de divulgar, troque `cargo` do mentor, que ainda está como `[Cargo do Anderson], [anos] anos em TI`. Para usar foto, coloque a imagem em `frontend/public/` (ex.: `anderson.jpg`) e escreva `foto: /anderson.jpg`.
+
+**Turmas, vagas e preços** são editados no painel, sem mexer em código. As três turmas iniciais vêm de `backend/src/main/resources/db/migration/V2__turmas_iniciais.sql`.
+
+**Teste o Pix antes de divulgar:** crie uma turma de teste com preço R$ 1,00, faça uma reserva e pague pelo app do banco. Confira se o nome do recebedor aparece certo.
+
+## Publicar
+
+O site precisa de um servidor Java. Por isso o GitHub Pages, que só hospeda páginas estáticas, não serve mais. Duas opções:
+
+### Com Docker (VPS, Railway, Render, Fly.io…)
+
+```bash
+cp .env.example .env    # preencha
+docker compose up -d --build
+```
+
+Isso sobe o site na porta 8080 e um PostgreSQL com os dados num volume. Em plataformas que constroem a partir do `Dockerfile` (Render, Railway, Fly.io), aponte para este repositório, crie um PostgreSQL na própria plataforma e configure as variáveis da tabela acima.
+
+### Só o jar
+
+Qualquer máquina com Java 21: `java -jar mentoria-1.0.0.jar`, com as variáveis de ambiente definidas. Coloque um proxy com HTTPS na frente (Caddy, Nginx ou o da plataforma). O app já entende os cabeçalhos `X-Forwarded-*`.
+
+## Testes
+
+```bash
+cd backend && mvn test            # 18 testes: Pix (inclui o exemplo do manual do Banco Central), reservas, vagas, expiração, painel
+cd frontend && npm test           # máscaras, validação, datas e mensagem do WhatsApp
+./e2e/rodar.sh                    # ponta a ponta no navegador: fluxo do aluno, painel, temas, 360 px a 1280 px
+```
+
+O teste ponta a ponta usa Playwright em Python (`pip install playwright`) e o helper da skill `webapp-testing` para subir o servidor. Ele salva screenshots em `e2e/screenshots/`. Para rodar contra PostgreSQL, passe `DATABASE_URL`, `DATABASE_USER` e `DATABASE_PASSWORD` antes do comando.
+
+## Estrutura
+
+```
+backend/    Spring Boot: api/ (controllers e respostas), reserva/ (regras, expiração),
+            turma/, pix/ (BR Code e CRC16), config/ (segurança, conteúdo)
+frontend/   React: pages/ (Início, Reserva, Admin), components/ (Agendamento, Fluxograma,
+            PixPainel), lib/ (API, formatação), styles/ (tokens e telas)
+e2e/        teste ponta a ponta e revisão visual
+docs/       especificação de design
+.claude/    skills do projeto (webapp-testing, brainstorming, frontend-design)
+```
+
+## Segurança
+
+- Só `/api/admin/**` exige login (HTTP Basic, enviado pelo app a cada chamada, sem cookie de sessão).
+- No máximo 5 reservas por IP a cada 10 minutos, contra robôs.
+- Cabeçalhos de segurança, incluindo Content Security Policy sem scripts de terceiros. A fonte é servida pelo próprio site.
+- O CSV exportado protege contra fórmulas maliciosas em planilhas.
+
+## Limites
+
+- **O pagamento é conferido à mão.** O Pix estático não avisa o site quando é pago. O comprovante chega pelo WhatsApp e o mentor confirma no painel. Para confirmação automática seria preciso um provedor com API e webhook (Mercado Pago, Asaas, Efí).
+- **E-mail.** O site não envia e-mail. Os avisos ao aluno saem pelo WhatsApp, com mensagens prontas.

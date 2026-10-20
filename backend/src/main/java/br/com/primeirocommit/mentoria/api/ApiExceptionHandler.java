@@ -1,11 +1,16 @@
 package br.com.primeirocommit.mentoria.api;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +22,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class ApiExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final ClassPathResource INDEX = new ClassPathResource("static/index.html");
 
     public record Erro(String mensagem, Map<String, String> campos) {
     }
@@ -44,8 +50,18 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new Erro(e.getMessage(), Map.of()));
     }
 
+    /**
+     * Endereço desconhecido: a API responde JSON; páginas recebem o app React (com status 404),
+     * que mostra a tela "Esta página não existe".
+     */
     @ExceptionHandler(NoResourceFoundException.class)
-    ResponseEntity<Erro> naoEncontrado(NoResourceFoundException e) {
+    ResponseEntity<?> naoEncontrado(NoResourceFoundException e, HttpServletRequest request) throws IOException {
+        if (!request.getRequestURI().startsWith("/api/") && INDEX.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.TEXT_HTML)
+                    .cacheControl(CacheControl.noCache())
+                    .body(INDEX.getContentAsByteArray());
+        }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Endereço não encontrado.", Map.of()));
     }
 

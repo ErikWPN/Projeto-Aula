@@ -83,7 +83,7 @@ O **Render** roda o site e o **Neon** guarda o banco. Os dois têm plano gratuit
 
 **1. Crie o banco no Neon**
 
-1. Entre em [neon.tech](https://neon.tech) com o GitHub e crie um projeto (nome `mentoria`, região São Paulo se houver).
+1. Entre em [neon.tech](https://neon.tech) com o GitHub e crie um projeto com nome `mentoria` e região **AWS US East 2 (Ohio)**. O Render não tem servidor no Brasil e o site fica em Ohio (`render.yaml`). Com site e banco na mesma região, as consultas ficam rápidas. Deixe os opcionais (Realtime, Better Auth) desligados.
 2. Em **Connect**, copie a *connection string*. Ela começa com `postgresql://` e já tem usuário e senha.
 
 **2. Crie o site no Render**

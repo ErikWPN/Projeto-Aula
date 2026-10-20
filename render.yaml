@@ -5,6 +5,8 @@ services:
     name: primeiro-commit
     runtime: docker
     plan: free
+    # Mesma região do banco no Neon (AWS US East 2, Ohio): consultas rápidas entre site e banco.
+    region: ohio
     branch: main
     autoDeploy: true
     healthCheckPath: /actuator/health

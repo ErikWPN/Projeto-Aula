@@ -254,7 +254,28 @@ def telas(browser):
         ctx.close()
 
 
+def preparar_turma_piloto():
+    """Põe a turma piloto no futuro, para o teste não depender da data em que roda."""
+    import base64
+    import datetime
+    import json
+    import urllib.request
+
+    hoje = datetime.date.today()
+    turma = {
+        "id": "piloto", "nome": "Turma piloto", "dias": "4 sábados", "horario": "9h às 11h",
+        "inicio": (hoje + datetime.timedelta(days=30)).isoformat(),
+        "fim": (hoje + datetime.timedelta(days=51)).isoformat(),
+        "vagas": 12, "preco": 97, "selo": "Preço de lançamento", "ativa": True,
+    }
+    auth = base64.b64encode(f"admin:{SENHA}".encode()).decode()
+    req = urllib.request.Request(BASE + "/api/admin/turmas/piloto", data=json.dumps(turma).encode(), method="PUT",
+                                 headers={"Content-Type": "application/json", "Authorization": "Basic " + auth})
+    urllib.request.urlopen(req).read()
+
+
 def main():
+    preparar_turma_piloto()
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, executable_path=CHROMIUM if os.path.exists(CHROMIUM) else None)
         ctx = browser.new_context(viewport={"width": 1280, "height": 900})

@@ -63,7 +63,7 @@ cd frontend && npm install && npm run dev          # site em :5173, com /api apo
 | `PIX_CHAVE`, `PIX_NOME`, `PIX_CIDADE` | conta que recebe. O nome vai como aparece no banco (até 25 letras) e a cidade até 15 letras |
 | `MENTORIA_WHATSAPP` | número que recebe os comprovantes: 55 + DDD + número, só dígitos |
 | `MENTORIA_LINK_CARTAO` | opcional: link de pagamento com cartão (Mercado Pago, InfinitePay…) |
-| `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` | banco PostgreSQL em produção |
+| `DATABASE_URL` | banco PostgreSQL em produção. Aceita a connection string do Neon, Render ou Supabase (`postgresql://usuario:senha@host/banco`) ou o formato JDBC com `DATABASE_USER` e `DATABASE_PASSWORD` |
 | `PORT` | porta HTTP (padrão 8080) |
 | `FORWARD_HEADERS` | `framework` quando o site roda atrás de um proxy (Render, Railway, Nginx); `none` quando exposto direto |
 
@@ -75,9 +75,36 @@ cd frontend && npm install && npm run dev          # site em :5173, com /api apo
 
 ## Publicar
 
-O site precisa de um servidor Java. Por isso o GitHub Pages, que só hospeda páginas estáticas, não serve mais. Duas opções:
+O site precisa de um servidor Java. Por isso o GitHub Pages, que só hospeda páginas estáticas, não serve mais.
 
-### Com Docker (VPS, Railway, Render, Fly.io…)
+### De graça: Render + Neon
+
+O **Render** roda o site e o **Neon** guarda o banco. Os dois têm plano gratuito e entram com a conta do GitHub. O banco fica no Neon porque o disco do servidor gratuito do Render é apagado a cada reinício.
+
+**1. Crie o banco no Neon**
+
+1. Entre em [neon.tech](https://neon.tech) com o GitHub e crie um projeto com nome `mentoria` e região **AWS US East 2 (Ohio)**. O Render não tem servidor no Brasil e o site fica em Ohio (`render.yaml`). Com site e banco na mesma região, as consultas ficam rápidas. Deixe os opcionais (Realtime, Better Auth) desligados.
+2. Em **Connect**, copie a *connection string*. Ela começa com `postgresql://` e já tem usuário e senha.
+
+**2. Crie o site no Render**
+
+1. Entre em [render.com](https://render.com) com o GitHub e autorize o acesso ao repositório `Projeto-Aula`.
+2. Clique em **New → Blueprint** e escolha o repositório. O Render lê o `render.yaml` e monta tudo no plano gratuito.
+3. Preencha as variáveis que ele pede:
+   - `DATABASE_URL`: a connection string do Neon.
+   - `PIX_CHAVE`, `PIX_NOME`: sua chave Pix e o nome como aparece no banco. Para testar antes, use `chave-pix@exemplo.com`, que mantém o modo demonstração.
+   - `MENTORIA_WHATSAPP`: 55 + DDD + número, só dígitos.
+4. Clique em **Apply**. O primeiro build leva alguns minutos. Depois o site fica em `https://primeiro-commit.onrender.com` (ou um nome parecido, se esse já existir).
+5. A senha do painel foi gerada pelo Render. Ela aparece em **Environment → ADMIN_SENHA**, e o usuário é `admin`.
+
+A cada merge na `main`, o Render publica a versão nova sozinho.
+
+**Limites do plano gratuito**
+
+- O site "dorme" depois de cerca de 15 minutos sem visitas. A próxima visita espera em torno de um minuto para ele acordar. Para não deixar um aluno esperando no meio da divulgação, abra o site um pouco antes de postar o link.
+- Os planos e limites mudam com o tempo. Confira as páginas de preço do Render e do Neon antes de depender deles.
+
+### Docker (VPS ou outras plataformas)
 
 ```bash
 cp .env.example .env    # preencha
@@ -93,10 +120,12 @@ Qualquer máquina com Java 21: `java -jar mentoria-1.0.0.jar`, com as variáveis
 ## Testes
 
 ```bash
-cd backend && mvn test            # 21 testes: Pix (inclui o exemplo do manual do Banco Central), reservas, vagas, expiração, painel
+cd backend && mvn test            # 25 testes: Pix (inclui o exemplo do manual do Banco Central), reservas, vagas, expiração, painel
 cd frontend && npm test           # máscaras, validação, datas e mensagem do WhatsApp
 ./e2e/rodar.sh                    # ponta a ponta no navegador: fluxo do aluno, painel, temas, 360 px a 1280 px
 ```
+
+No GitHub, o workflow `.github/workflows/ci.yml` roda tudo isso a cada pull request.
 
 O teste ponta a ponta usa Playwright em Python (`pip install playwright`) e o helper da skill `webapp-testing` para subir o servidor. Ele salva screenshots em `e2e/screenshots/`. Para rodar contra PostgreSQL, passe `DATABASE_URL`, `DATABASE_USER` e `DATABASE_PASSWORD` antes do comando.
 

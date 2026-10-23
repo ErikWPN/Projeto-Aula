@@ -30,7 +30,7 @@ public final class Views {
 
     public record SiteView(String nome, String titulo, String chamada, String formato, String publico,
             String whatsapp, String linkCartao, boolean demo, int reservaHoras, MentoriaProperties.Mentor mentor,
-            List<MentoriaProperties.Encontro> ementa, List<MentoriaProperties.Pergunta> faq, List<String> niveis,
+            String ementaTitulo, String ementaIntro, List<MentoriaProperties.Encontro> ementa, List<MentoriaProperties.Pergunta> faq, List<String> niveis,
             List<String> origens, List<TurmaView> turmas, BigDecimal precoMinimo) {
     }
 

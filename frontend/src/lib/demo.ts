@@ -37,26 +37,34 @@ const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
     bio: "Trabalha com tecnologia todos os dias e já ajudou muita gente a encontrar o próprio caminho na área. Nas aulas, mostra como a TI funciona por dentro, sem jargão e sem pressa.",
     foto: "",
   },
+  ementaTitulo: "Fundamentos inegociáveis da Computação",
+  ementaIntro:
+    "A maioria dos cursos negligencia os principais fundamentos, e o aluno se sente perdido, sem condições de acompanhar o cronograma das aulas. Aqui você encontra as bases necessárias para avançar no estudo de qualquer frente de TI.",
   ementa: [
     {
-      titulo: "O mapa da TI",
+      titulo: "Computação fundamental",
       topicos:
-        "Como a tecnologia funciona dentro de uma empresa: computadores, redes, internet, nuvem, dados e inteligência artificial, em linguagem simples.",
+        "Tudo na TI funciona sob os princípios da computação. Aqui você terá o alicerce principal, sobre o qual vai fundamentar todo o conhecimento de TI que adquirir ao longo da vida.",
     },
     {
-      titulo: "As áreas por dentro",
+      titulo: "Infraestrutura de TI",
       topicos:
-        "Suporte e infraestrutura, desenvolvimento, dados, segurança da informação, cloud, UX e produto, qualidade de software: a rotina, o perfil de quem se dá bem e por onde se começa em cada uma.",
+        "Você vai conhecer os principais elementos que permitem a comunicação entre dispositivos e o armazenamento de informações em nuvem.",
     },
     {
-      titulo: "Mão na massa",
+      titulo: "Desenvolvimento de sistemas",
       topicos:
-        "Experimente antes de escolher: práticas guiadas e curtas de lógica de programação, análise de dados, redes e segurança e criação de telas.",
+        "Os pilares do raciocínio lógico de quem desenvolve sistemas. Aqui você compreende o que está por trás da programação de computadores.",
     },
     {
-      titulo: "Seu plano de entrada",
+      titulo: "Banco de dados",
       topicos:
-        "A área escolhida, uma trilha de estudos com cursos gratuitos e certificações de entrada, o primeiro portfólio, currículo e LinkedIn para a primeira vaga ou a transição.",
+        "O volume de dados é colossal. Como ele é organizado? Quais são as estruturas lógicas por trás do armazenamento e da disponibilização de dados?",
+    },
+    {
+      titulo: "Dúvidas sobre qualquer coisa",
+      topicos:
+        "Um espaço aberto para tirar dúvidas sobre qualquer assunto: os blocos anteriores, as áreas da TI, estudos e carreira.",
     },
   ],
   faq: [
@@ -67,21 +75,21 @@ const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
     {
       pergunta: "Trabalho em outra área há anos. Ainda dá tempo?",
       resposta:
-        "A mentoria foi pensada para quem está mudando de carreira. O plano de entrada do último encontro leva em conta a sua experiência atual, que muitas vezes conta a favor na nova área.",
+        "Sim. A mentoria parte do zero e foi pensada também para quem está mudando de carreira. No bloco de dúvidas, dá para conversar sobre o seu caso.",
     },
     {
       pergunta: "Preciso de faculdade de TI?",
       resposta:
-        "Para começar em várias áreas, não. Falamos de cursos livres, certificações e graduação, e de quando cada um faz sentido para o caminho que você escolher.",
+        "Para começar em várias áreas, não. A base que você aprende aqui serve tanto para quem vai fazer faculdade quanto para quem vai estudar com cursos livres e certificações.",
     },
     {
       pergunta: "A mentoria garante emprego?",
       resposta:
-        "Não. Você sai com uma área escolhida, um plano de estudos e um currículo pronto para começar a se candidatar. O resultado depende de você seguir o plano.",
+        "Não. A mentoria dá a base de computação que os cursos costumam pular, para você seguir em qualquer área de TI com segurança. O resultado depende de você continuar estudando.",
     },
     {
       pergunta: "O que eu preciso ter?",
-      resposta: "Um computador com internet. Pelo celular dá para assistir, mas as práticas pedem um computador.",
+      resposta: "Um computador com internet. Pelo celular dá para assistir, mas os exercícios pedem um computador.",
     },
     {
       pergunta: "Como confirmo minha vaga?",

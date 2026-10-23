@@ -98,7 +98,8 @@ class ApiTest {
                 .andExpect(jsonPath("$.turmas[0].vagasLivres").value(12))
                 .andExpect(jsonPath("$.turmas[0].situacao").value("ABERTA"))
                 .andExpect(jsonPath("$.precoMinimo").value(97.0))
-                .andExpect(jsonPath("$.ementa", hasSize(4)));
+                .andExpect(jsonPath("$.ementa", hasSize(5)))
+                .andExpect(jsonPath("$.ementaTitulo").value("Fundamentos inegociáveis da Computação"));
     }
 
     @Test

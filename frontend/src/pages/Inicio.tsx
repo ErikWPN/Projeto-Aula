@@ -91,8 +91,8 @@ export function Inicio() {
               <dd>{site.formato}</dd>
             </div>
             <div>
-              <dt>Duração</dt>
-              <dd>{site.ementa.length} encontros ao vivo</dd>
+              <dt>Conteúdo</dt>
+              <dd>{site.ementa.length} blocos, ao vivo</dd>
             </div>
             <div>
               <dt>Para quem</dt>
@@ -122,22 +122,19 @@ export function Inicio() {
       <section className="bloco" id="ementa" aria-labelledby="titulo-ementa">
         <div className="wrap">
           <div className="bloco__cabeca">
-            <h2 id="titulo-ementa">O que você vai aprender</h2>
-            <p>
-              Um panorama da TI em linguagem simples, as principais áreas por dentro e um plano para você entrar na que
-              combina com você, em {site.ementa.length} encontros.
-            </p>
+            <h2 id="titulo-ementa">{site.ementaTitulo}</h2>
+            {site.ementaIntro && <p>{site.ementaIntro}</p>}
           </div>
           <ol className="ementa">
             {site.ementa.map((e, i) => (
               <li key={e.titulo} className="ementa__item">
-                <span className="ementa__n">Encontro {i + 1}</span>
+                <span className="ementa__n">Bloco {i + 1}</span>
                 <h3>{e.titulo}</h3>
                 <p>{e.topicos}</p>
               </li>
             ))}
             <li className="ementa__fim">
-              Seu plano para entrar na TI
+              Base pronta para qualquer área de TI
             </li>
           </ol>
         </div>

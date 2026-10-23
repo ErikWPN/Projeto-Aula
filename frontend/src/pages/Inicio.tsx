@@ -19,7 +19,7 @@ export function Inicio() {
       const dados = await api.site();
       setSite(dados);
       setErro(null);
-      document.title = `Mentoria ${dados.nome}: seu caminho para entrar na TI`;
+      document.title = `${dados.nome}: seu caminho para entrar na TI`;
     } catch (e) {
       setErro(e instanceof ApiError ? e.message : "Não foi possível carregar as turmas.");
     }

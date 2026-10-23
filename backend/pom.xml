@@ -14,7 +14,7 @@
   <artifactId>mentoria</artifactId>
   <version>1.0.0</version>
   <name>mentoria</name>
-  <description>Site e sistema de reservas da mentoria Primeiro Commit</description>
+  <description>Site e sistema de reservas da mentoria TI para Leigos</description>
 
   <properties>
     <java.version>21</java.version>

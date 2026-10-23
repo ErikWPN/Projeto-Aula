@@ -17,7 +17,7 @@ const css = arquivo(/<link rel="stylesheet"[^>]*href="\.\/([^"]+\.css)"/, "CSS")
 const js = arquivo(/<script type="module"[^>]*src="\.\/([^"]+\.js)"/, "JavaScript").replace(/<\/script/gi, "<\\/script");
 const tema = readFileSync(new URL("../public/tema.js", import.meta.url), "utf8");
 
-const pagina = `<title>Mentoria Primeiro Commit</title>
+const pagina = `<title>TI para Leigos</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Mentoria de TI básica e lógica de programação do zero, ao vivo e em turma pequena.">
 <link rel="preconnect" href="https://fonts.googleapis.com">

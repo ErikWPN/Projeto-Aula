@@ -21,7 +21,7 @@ const HORAS_RESERVA = 24;
 const PIX = { chave: "chave-pix@exemplo.com", nome: "Anderson Exemplo", cidade: "Sao Paulo" };
 
 const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
-  nome: "Primeiro Commit",
+  nome: "TI para Leigos",
   titulo: "Entenda a TI, descubra a área que combina com você e entre com um plano.",
   chamada:
     "Mentoria ao vivo para quem está começando ou mudando de carreira. Tudo explicado do zero, sem precisar saber programar.",

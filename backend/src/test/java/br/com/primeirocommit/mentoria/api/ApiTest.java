@@ -91,7 +91,7 @@ class ApiTest {
     void siteTrazConteudoTurmasEPrecoMinimo() throws Exception {
         mvc.perform(get("/api/site"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nome").value("Primeiro Commit"))
+                .andExpect(jsonPath("$.nome").value("TI para Leigos"))
                 .andExpect(jsonPath("$.demo").value(true))
                 .andExpect(jsonPath("$.turmas", hasSize(3)))
                 .andExpect(jsonPath("$.turmas[0].id").value("piloto"))

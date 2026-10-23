@@ -55,7 +55,7 @@ describe("mensagem do comprovante", () => {
   it("leva código, turma, nome e valor", () => {
     const msg = mensagemComprovante({
       codigo: "PCABCD2345",
-      mentoria: "Primeiro Commit",
+      mentoria: "TI para Leigos",
       turma: "Turma piloto",
       periodo: "21 nov a 12 dez 2026",
       nome: "Maria Souza",

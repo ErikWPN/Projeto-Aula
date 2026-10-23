@@ -24,7 +24,7 @@ public record NovaReservaRequest(
         @Size(max = 25, message = "Use DDD e número, por exemplo (11) 91234-5678.")
         String whatsapp,
 
-        @NotBlank(message = "Escolha seu nível.")
+        @NotBlank(message = "Conte em que momento você está.")
         String nivel,
 
         @NotBlank(message = "Conte como conheceu a mentoria.")

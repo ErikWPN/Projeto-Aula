@@ -74,7 +74,7 @@ class ApiTest {
     private static String corpo(String turma, String nome, String email, String whatsapp) {
         return """
                 {"turmaId":"%s","nome":"%s","email":"%s","whatsapp":"%s",
-                 "nivel":"Nunca programei","origem":"Faculdade"}
+                 "nivel":"Não sei por onde começar","origem":"Faculdade"}
                 """.formatted(turma, nome, email, whatsapp);
     }
 

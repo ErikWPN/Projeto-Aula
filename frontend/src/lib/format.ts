@@ -79,7 +79,7 @@ export function validarDados(d: Dados): Partial<Record<keyof Dados, string>> {
   if (!fone) erros.whatsapp = "Escreva seu WhatsApp com DDD.";
   else if (fone.length < 10 || fone.length > 11) erros.whatsapp = "Use DDD e número, por exemplo (11) 91234-5678.";
 
-  if (!d.nivel) erros.nivel = "Escolha seu nível.";
+  if (!d.nivel) erros.nivel = "Conte em que momento você está.";
   if (!d.origem) erros.origem = "Conte como conheceu a mentoria.";
   return erros;
 }

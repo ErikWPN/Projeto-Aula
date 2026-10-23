@@ -19,7 +19,7 @@ export function Inicio() {
       const dados = await api.site();
       setSite(dados);
       setErro(null);
-      document.title = `Mentoria ${dados.nome}: TI básica e lógica de programação`;
+      document.title = `Mentoria ${dados.nome}: seu caminho para entrar na TI`;
     } catch (e) {
       setErro(e instanceof ApiError ? e.message : "Não foi possível carregar as turmas.");
     }
@@ -55,7 +55,8 @@ export function Inicio() {
     );
   }
 
-  const nivelSugerido = caminho === "nao" ? site.niveis[0] : caminho === "sim" ? site.niveis[1] ?? site.niveis[0] : null;
+  const nivelSugerido =
+    caminho === "nao" ? site.niveis[0] : caminho === "sim" ? site.niveis[site.niveis.length - 1] : null;
 
   return (
     <>
@@ -104,14 +105,14 @@ export function Inicio() {
           <p className="fluxo__resposta" aria-live="polite">
             {caminho === "nao" && (
               <>
-                Ótimo ponto de partida: a turma começa pela base. Já deixamos “{site.niveis[0]}” marcado no{" "}
-                <a href="#agendar">agendamento</a>.
+                Ótimo ponto de partida: a mentoria mostra cada área por dentro antes de você escolher. Já deixamos “
+                {site.niveis[0]}” marcado no <a href="#agendar">agendamento</a>.
               </>
             )}
             {caminho === "sim" && (
               <>
-                A mentoria organiza o que você aprendeu solto e fecha as lacunas. Já deixamos “{site.niveis[1] ?? site.niveis[0]}”
-                marcado no <a href="#agendar">agendamento</a>.
+                Você testa essa área na prática e compara com as outras antes de decidir. Já deixamos “
+                {site.niveis[site.niveis.length - 1]}” marcado no <a href="#agendar">agendamento</a>.
               </>
             )}
           </p>
@@ -123,8 +124,8 @@ export function Inicio() {
           <div className="bloco__cabeca">
             <h2 id="titulo-ementa">O que você vai aprender</h2>
             <p>
-              A base de TI que a faculdade costuma pular e a lógica que todo curso de programação usa nas primeiras semanas,
-              em {site.ementa.length} encontros.
+              Um panorama da TI em linguagem simples, as principais áreas por dentro e um plano para você entrar na que
+              combina com você, em {site.ementa.length} encontros.
             </p>
           </div>
           <ol className="ementa">
@@ -136,7 +137,7 @@ export function Inicio() {
               </li>
             ))}
             <li className="ementa__fim">
-              Seu primeiro programa, do zero
+              Seu plano para entrar na TI
             </li>
           </ol>
         </div>
@@ -200,7 +201,7 @@ export function Inicio() {
           <p className="rodape__marca">
             <Marca />
             <span>
-              {site.nome}: mentoria de TI básica e lógica de programação
+              {site.nome}: mentoria para quem quer entrar na TI
             </span>
           </p>
           <p>

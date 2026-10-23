@@ -61,7 +61,7 @@ estado: dict[str, str] = {}
 def t_inicio(page: Page):
     page.goto(BASE + "/")
     page.wait_for_load_state("networkidle")
-    expect(page.locator("h1")).to_contain_text("primeiro programa")
+    expect(page.locator("h1")).to_contain_text("descubra a área")
     expect(page.locator(".heroi__preco")).to_contain_text("R$ 97,00")
     expect(page.locator(".ementa__item")).to_have_count(4)
     expect(page.locator(".turma")).to_have_count(3)
@@ -69,11 +69,11 @@ def t_inicio(page: Page):
     expect(page.locator("#mentor h2")).to_have_text("Anderson")
 
 
-@caso("fluxograma marca o caminho e pré-preenche o nível")
+@caso("fluxograma marca o caminho e pré-preenche o momento")
 def t_fluxo(page: Page):
     page.get_by_role("button", name="Ainda não").click()
     expect(page.get_by_role("button", name="Ainda não")).to_have_attribute("aria-pressed", "true")
-    expect(page.locator(".fluxo__resposta")).to_contain_text("começa pela base")
+    expect(page.locator(".fluxo__resposta")).to_contain_text("cada área por dentro")
     assert page.locator(".fluxo__no.ativo").count() >= 4, "caminho não acendeu"
     assert page.locator(".fluxo__no.apagado").count() == 1, "o outro ramo deveria apagar"
 
@@ -93,7 +93,7 @@ def t_passo1(page: Page):
 
 @caso("passo 2: validação explica como corrigir")
 def t_passo2_validacao(page: Page):
-    expect(page.locator("#f-nivel")).to_have_value("Nunca programei")
+    expect(page.locator("#f-nivel")).to_have_value("Não sei por onde começar")
     page.get_by_role("button", name=re.compile("Gerar Pix")).click()
     expect(page.locator("#e-nome")).to_have_text("Escreva seu nome completo.")
     expect(page.locator("#f-nome")).to_be_focused()
@@ -221,8 +221,11 @@ def t_tema(page: Page):
 @caso("teclado: link de pular conteúdo e foco visível")
 def t_teclado(page: Page):
     page.goto(BASE + "/")
+    pular = page.get_by_role("link", name="Pular para o conteúdo")
+    # O React desenha a página depois do carregamento: o Tab só vale quando o link já existe.
+    pular.wait_for(state="attached")
     page.keyboard.press("Tab")
-    expect(page.get_by_role("link", name="Pular para o conteúdo")).to_be_focused()
+    expect(pular).to_be_focused()
     estilo = page.evaluate("getComputedStyle(document.activeElement).outlineStyle")
     assert estilo != "none", "sem contorno de foco"
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Link } from "react-router";
 import QRCode from "qrcode";
 import type { Reserva } from "../lib/api";
@@ -14,20 +14,25 @@ interface Props {
 }
 
 export function PixPainel({ reserva, mentoria, whatsapp, linkCartao, mostrarLinkReserva = true }: Props) {
-  const [svg, setSvg] = useState("");
-  const [falhouQr, setFalhouQr] = useState(false);
   const campo = useRef<HTMLInputElement>(null);
   const toast = useToast();
   const pix = reserva.pixCopiaECola ?? "";
 
-  useEffect(() => {
-    let ativo = true;
-    QRCode.toString(pix, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#1e2a26", light: "#ffffff" } })
-      .then((s) => ativo && setSvg(s))
-      .catch(() => ativo && setFalhouQr(true));
-    return () => {
-      ativo = false;
-    };
+  // O QR é desenhado direto como SVG do React: sem promessa e sem HTML injetado,
+  // o que evita falhas em navegadores de celular como o Samsung Internet.
+  const qr = useMemo(() => {
+    try {
+      const modulos = QRCode.create(pix, { errorCorrectionLevel: "M" }).modules;
+      let caminho = "";
+      for (let y = 0; y < modulos.size; y++) {
+        for (let x = 0; x < modulos.size; x++) {
+          if (modulos.get(y, x)) caminho += `M${x + 1} ${y + 1}h1v1h-1z`;
+        }
+      }
+      return { lado: modulos.size + 2, caminho };
+    } catch {
+      return null;
+    }
   }, [pix]);
 
   async function copiar() {
@@ -55,10 +60,19 @@ export function PixPainel({ reserva, mentoria, whatsapp, linkCartao, mostrarLink
     <div className="pix">
       <div className="pix__qr">
         <div className="pix__qr-moldura">
-          {svg ? (
-            <div className="pix__qr-img" role="img" aria-label="QR code do Pix" dangerouslySetInnerHTML={{ __html: svg }} />
+          {qr ? (
+            <svg
+              className="pix__qr-img"
+              viewBox={`0 0 ${qr.lado} ${qr.lado}`}
+              shapeRendering="crispEdges"
+              role="img"
+              aria-label="QR code do Pix"
+            >
+              <rect width={qr.lado} height={qr.lado} fill="#ffffff" />
+              <path d={qr.caminho} fill="#1e2a26" />
+            </svg>
           ) : (
-            <p className="pix__qr-falha">{falhouQr ? "Não deu para desenhar o QR. Use o Pix copia e cola." : "Gerando QR code…"}</p>
+            <p className="pix__qr-falha">Não deu para desenhar o QR. Use o Pix copia e cola.</p>
           )}
           {reserva.demo && (
             <p className="pix__demo" aria-label="Exemplo, não pague">

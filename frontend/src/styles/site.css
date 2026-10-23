@@ -841,6 +841,9 @@ body::before {
 }
 
 .pix__qr-moldura {
+  /* Navegadores que escurecem sites sozinhos (Samsung Internet) deixariam o QR ilegível. */
+  color-scheme: only light;
+  forced-color-adjust: none;
   position: relative;
   width: min(260px, 100%);
   aspect-ratio: 1;

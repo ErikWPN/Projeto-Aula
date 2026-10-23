@@ -363,10 +363,13 @@ body::before {
 
 .fluxo__opcoes {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
 }
 
 .fluxo__opcao {
+  white-space: nowrap;
   min-height: 44px;
   padding: 8px 16px;
   border: 2px solid var(--grafite);
@@ -410,7 +413,7 @@ body::before {
   font-size: 1.08rem;
 }
 
-/* ---------- Ementa: uma sequência de processos que termina no primeiro programa ---------- */
+/* ---------- Ementa: uma sequência de encontros que termina no plano de entrada ---------- */
 .ementa {
   list-style: none;
   margin: 0;

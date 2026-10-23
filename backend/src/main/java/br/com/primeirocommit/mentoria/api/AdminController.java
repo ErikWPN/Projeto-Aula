@@ -95,7 +95,7 @@ public class AdminController {
     public ResponseEntity<byte[]> csv() {
         Instant agora = clock.instant();
         StringBuilder sb = new StringBuilder("﻿");
-        sb.append("Código;Status;Turma;Nome;E-mail;WhatsApp;Nível;Origem;Valor;Criada em;Paga em\n");
+        sb.append("Código;Status;Turma;Nome;E-mail;WhatsApp;Momento;Origem;Valor;Criada em;Paga em\n");
         for (Reserva r : reservas.listar()) {
             sb.append(String.join(";",
                     r.getCodigo(), r.statusEm(agora).name(), celula(r.getTurma().getNome()), celula(r.getNome()),

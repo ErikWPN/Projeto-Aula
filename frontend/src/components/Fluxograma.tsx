@@ -8,8 +8,8 @@ interface Props {
 }
 
 /**
- * O fluxograma da primeira aula de lógica, usado como porta de entrada:
- * a resposta acende o caminho e já marca o nível no formulário de agendamento.
+ * Um fluxograma como porta de entrada: a pessoa responde se já sabe que área de TI quer seguir,
+ * o caminho acende e a resposta já fica marcada no formulário de agendamento.
  * Formas com significado: oval = início/fim, paralelogramo = entrada, losango = decisão, retângulo = processo.
  */
 export function Fluxograma({ escolha, onEscolher }: Props) {
@@ -20,10 +20,10 @@ export function Fluxograma({ escolha, onEscolher }: Props) {
   return (
     <figure className="fluxo" data-escolha={escolha ?? "nenhuma"}>
       <svg viewBox="0 0 400 476" role="img" aria-labelledby={`${id}-t ${id}-d`}>
-        <title id={`${id}-t`}>Fluxograma: por onde você começa</title>
+        <title id={`${id}-t`}>Fluxograma: seu caminho na TI</title>
         <desc id={`${id}-d`}>
-          Início. Leia a resposta: você já programou? Se não, começar pela base. Se sim, revisar e preencher as lacunas. Os
-          dois caminhos terminam no seu primeiro programa.
+          Início. Leia a resposta: você já sabe que área de TI quer seguir? Se não, conhecer todas as áreas. Se sim,
+          testar e confirmar a escolha. Os dois caminhos terminam no seu plano de entrada na TI.
         </desc>
 
         <defs>
@@ -44,24 +44,24 @@ export function Fluxograma({ escolha, onEscolher }: Props) {
 
         <g className={`fluxo__no fluxo__decisao ${tronco}`} style={{ "--i": 2 } as React.CSSProperties}>
           <polygon points="200,170 316,230 200,290 84,230" />
-          <text x="200" y="236">já programou?</text>
+          <text x="200" y="236">já sabe a área?</text>
         </g>
 
         <g className={`fluxo__no ${classe("nao")}`} style={{ "--i": 3 } as React.CSSProperties}>
           <rect x="8" y="332" width="168" height="58" rx="3" />
-          <text x="92" y="358">começar</text>
-          <text x="92" y="378">pela base</text>
+          <text x="92" y="358">conhecer</text>
+          <text x="92" y="378">todas as áreas</text>
         </g>
 
         <g className={`fluxo__no ${classe("sim")}`} style={{ "--i": 3 } as React.CSSProperties}>
           <rect x="224" y="332" width="168" height="58" rx="3" />
-          <text x="308" y="358">revisar e fechar</text>
-          <text x="308" y="378">as lacunas</text>
+          <text x="308" y="358">testar e</text>
+          <text x="308" y="378">confirmar</text>
         </g>
 
         <g className={`fluxo__no fluxo__fim ${escolha ? "ativo" : ""}`} style={{ "--i": 4 } as React.CSSProperties}>
           <rect x="96" y="422" width="208" height="46" rx="23" />
-          <text x="200" y="451">primeiro programa</text>
+          <text x="200" y="451">plano de entrada</text>
         </g>
 
         <g className="fluxo__setas" markerEnd={`url(#${id}-seta)`}>
@@ -83,14 +83,14 @@ export function Fluxograma({ escolha, onEscolher }: Props) {
 
       <figcaption className="fluxo__pergunta">
         <span id={`${id}-p`} className="fluxo__enunciado">
-          Você já programou?
+          Já sabe que área de TI quer seguir?
         </span>
         <span className="fluxo__opcoes" role="group" aria-labelledby={`${id}-p`}>
           <button type="button" className="fluxo__opcao" aria-pressed={escolha === "nao"} onClick={() => onEscolher("nao")}>
             Ainda não
           </button>
           <button type="button" className="fluxo__opcao" aria-pressed={escolha === "sim"} onClick={() => onEscolher("sim")}>
-            Já tentei
+            Tenho uma ideia
           </button>
         </span>
       </figcaption>

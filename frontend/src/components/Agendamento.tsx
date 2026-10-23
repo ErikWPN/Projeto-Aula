@@ -54,7 +54,7 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
 
   const turma = site.turmas.find((t) => t.id === turmaId && t.situacao === "ABERTA") ?? null;
 
-  // A resposta do fluxograma do topo vira o nível pré-marcado.
+  // A resposta do fluxograma do topo vira o "momento" pré-marcado.
   useEffect(() => {
     if (nivelSugerido) setDados((d) => ({ ...d, nivel: nivelSugerido }));
   }, [nivelSugerido]);
@@ -280,7 +280,7 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
               {erroDe("whatsapp")}
             </div>
             <div className="campo">
-              <label htmlFor="f-nivel">Seu nível hoje</label>
+              <label htmlFor="f-nivel">Seu momento hoje</label>
               <select {...propsCampo("nivel")} onChange={(e) => alterar("nivel", e.target.value)}>
                 <option value="">Escolha uma opção</option>
                 {site.niveis.map((n) => (

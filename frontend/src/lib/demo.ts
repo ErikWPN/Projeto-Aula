@@ -22,10 +22,11 @@ const PIX = { chave: "chave-pix@exemplo.com", nome: "Anderson Exemplo", cidade: 
 
 const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
   nome: "Primeiro Commit",
-  titulo: "Entenda o computador e escreva seu primeiro programa sem decoreba.",
-  chamada: "TI básica e lógica de programação do zero, ao vivo e em turma pequena.",
+  titulo: "Entenda a TI, descubra a área que combina com você e entre com um plano.",
+  chamada:
+    "Mentoria ao vivo para quem está começando ou mudando de carreira. Tudo explicado do zero, sem precisar saber programar.",
   formato: "Online e ao vivo pelo Google Meet",
-  publico: "Calouros de cursos de TI e quem está migrando de área",
+  publico: "Quem quer entrar na TI, está mudando de carreira ou não sabe que área escolher",
   whatsapp: "5511900000000",
   linkCartao: "",
   demo: true,
@@ -33,35 +34,54 @@ const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
   mentor: {
     nome: "Anderson",
     cargo: "[Cargo do Anderson], [anos] anos em TI",
-    bio: "Trabalha com tecnologia todos os dias e já ajudou muita gente a dar os primeiros passos. Nas aulas, explica o porquê de cada coisa antes de mostrar o código.",
+    bio: "Trabalha com tecnologia todos os dias e já ajudou muita gente a encontrar o próprio caminho na área. Nas aulas, mostra como a TI funciona por dentro, sem jargão e sem pressa.",
     foto: "",
   },
   ementa: [
     {
-      titulo: "Como o computador funciona",
-      topicos: "Processador, memória, armazenamento, dispositivos de entrada e saída, sistema operacional, arquivos e pastas.",
+      titulo: "O mapa da TI",
+      topicos:
+        "Como a tecnologia funciona dentro de uma empresa: computadores, redes, internet, nuvem, dados e inteligência artificial, em linguagem simples.",
     },
     {
-      titulo: "Redes e internet",
-      topicos: "O que acontece quando você abre um site: IP, DNS, navegador e servidor. Cuidados básicos de segurança.",
+      titulo: "As áreas por dentro",
+      topicos:
+        "Suporte e infraestrutura, desenvolvimento, dados, segurança da informação, cloud, UX e produto, qualidade de software: a rotina, o perfil de quem se dá bem e por onde se começa em cada uma.",
     },
     {
-      titulo: "Lógica de programação",
-      topicos: "Algoritmos, variáveis, tipos de dados, entrada e saída e condições (se / senão), com exercícios em Portugol.",
+      titulo: "Mão na massa",
+      topicos:
+        "Experimente antes de escolher: práticas guiadas e curtas de lógica de programação, análise de dados, redes e segurança e criação de telas.",
     },
     {
-      titulo: "Repetição e seu primeiro programa",
-      topicos: "Laços, funções e um programa completo do zero, primeiro em Portugol e depois em Python.",
+      titulo: "Seu plano de entrada",
+      topicos:
+        "A área escolhida, uma trilha de estudos com cursos gratuitos e certificações de entrada, o primeiro portfólio, currículo e LinkedIn para a primeira vaga ou a transição.",
     },
   ],
   faq: [
     {
-      pergunta: "Preciso saber alguma coisa antes?",
-      resposta: "Não. A mentoria começa do zero. Se você sabe ligar o computador e usar o navegador, já pode participar.",
+      pergunta: "Preciso saber programar?",
+      resposta: "Não. Programação é só uma das áreas da TI, e muitas carreiras começam sem escrever código. A mentoria parte do zero.",
+    },
+    {
+      pergunta: "Trabalho em outra área há anos. Ainda dá tempo?",
+      resposta:
+        "A mentoria foi pensada para quem está mudando de carreira. O plano de entrada do último encontro leva em conta a sua experiência atual, que muitas vezes conta a favor na nova área.",
+    },
+    {
+      pergunta: "Preciso de faculdade de TI?",
+      resposta:
+        "Para começar em várias áreas, não. Falamos de cursos livres, certificações e graduação, e de quando cada um faz sentido para o caminho que você escolher.",
+    },
+    {
+      pergunta: "A mentoria garante emprego?",
+      resposta:
+        "Não. Você sai com uma área escolhida, um plano de estudos e um currículo pronto para começar a se candidatar. O resultado depende de você seguir o plano.",
     },
     {
       pergunta: "O que eu preciso ter?",
-      resposta: "Um computador com internet. Pelo celular dá para assistir, mas não para fazer os exercícios.",
+      resposta: "Um computador com internet. Pelo celular dá para assistir, mas as práticas pedem um computador.",
     },
     {
       pergunta: "Como confirmo minha vaga?",
@@ -74,7 +94,7 @@ const CONTEUDO: Omit<Site, "turmas" | "precoMinimo"> = {
         "Você pode desistir em até 7 dias depois do pagamento e recebe o valor de volta (direito de arrependimento, art. 49 do Código de Defesa do Consumidor).",
     },
   ],
-  niveis: ["Nunca programei", "Já tentei sozinho", "Estou no começo da faculdade"],
+  niveis: ["Não sei por onde começar", "Estou mudando de carreira", "Já tenho uma área em mente"],
   origens: ["Faculdade", "Indicação de amigo", "Instagram ou TikTok", "WhatsApp", "Outro"],
 };
 
@@ -121,12 +141,12 @@ function semente(): Estado {
     reservas: [
       {
         codigo: "PCEXEMPLO2", status: "PAGA", turmaId: "piloto", nome: "Joana Exemplo", email: "joana@exemplo.com",
-        whatsapp: "5511900000001", nivel: "Nunca programei", origem: "Faculdade", valor: 97,
+        whatsapp: "5511900000001", nivel: "Não sei por onde começar", origem: "Faculdade", valor: 97,
         criadoEm: iso(26 * 3_600_000), expiraEm: iso(2 * 3_600_000), pagoEm: iso(20 * 3_600_000), canceladoEm: null,
       },
       {
         codigo: "PCEXEMPLO3", status: "PENDENTE", turmaId: "piloto", nome: "Rafael Exemplo", email: "rafael@exemplo.com",
-        whatsapp: "5521900000002", nivel: "Já tentei sozinho", origem: "Instagram ou TikTok", valor: 97,
+        whatsapp: "5521900000002", nivel: "Estou mudando de carreira", origem: "Instagram ou TikTok", valor: 97,
         criadoEm: iso(3 * 3_600_000), expiraEm: new Date(agora + 21 * 3_600_000).toISOString(), pagoEm: null, canceladoEm: null,
       },
     ],

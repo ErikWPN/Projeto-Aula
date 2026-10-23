@@ -1,6 +1,6 @@
 # Primeiro Commit: site e reservas da mentoria
 
-Site da mentoria de TI básica e lógica de programação. Mostra as turmas, faz a reserva, gera o Pix com o valor e o código da reserva e oferece um painel para o mentor conferir pagamentos e cuidar das turmas.
+Site da mentoria para quem quer entrar na TI, está mudando de carreira ou não sabe que área escolher. Mostra as turmas, faz a reserva, gera o Pix com o valor e o código da reserva e oferece um painel para o mentor conferir pagamentos e cuidar das turmas.
 
 - **Backend:** Java 21 e Spring Boot 4.1 (API, banco, Pix, painel protegido por senha).
 - **Frontend:** React 19, Vite e TypeScript (página pública, página da reserva, painel).

@@ -47,11 +47,6 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest().body(new Erro("Não foi possível ler os dados enviados.", Map.of()));
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    ResponseEntity<Erro> estado(IllegalStateException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new Erro(e.getMessage(), Map.of()));
-    }
-
     /**
      * Endereço desconhecido: a API responde JSON; páginas recebem o app React (com status 404),
      * que mostra a tela "Esta página não existe".

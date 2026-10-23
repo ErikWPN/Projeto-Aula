@@ -149,7 +149,8 @@ class ApiTest {
         reservar("piloto").andExpect(status().isCreated());
         reservar("piloto")
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.mensagem", startsWith("A última vaga")));
+                .andExpect(jsonPath("$.mensagem", startsWith("A última vaga")))
+                .andExpect(jsonPath("$.campos.turmaId", startsWith("A última vaga")));
         mvc.perform(get("/api/site")).andExpect(jsonPath("$.turmas[0].situacao").value("ESGOTADA"));
     }
 
@@ -171,7 +172,7 @@ class ApiTest {
     @Test
     void inscricoesFecham_depoisDoPrimeiroEncontro() throws Exception {
         relogio.definir(Instant.parse("2026-11-22T12:00:00Z"));
-        reservar("piloto").andExpect(status().isConflict());
+        reservar("piloto").andExpect(status().isConflict()).andExpect(jsonPath("$.campos.turmaId").exists());
         mvc.perform(get("/api/site"))
                 .andExpect(jsonPath("$.turmas[0].situacao").value("ENCERRADA"))
                 .andExpect(jsonPath("$.precoMinimo").value(147.0));

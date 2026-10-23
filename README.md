@@ -73,6 +73,10 @@ cd frontend && npm install && npm run dev          # site em :5173, com /api apo
 
 **Teste o Pix antes de divulgar:** crie uma turma de teste com preço R$ 1,00, faça uma reserva e pague pelo app do banco. Confira se o nome do recebedor aparece certo.
 
+## Apresentar sem servidor
+
+`cd frontend && npm run build:apresentacao` gera `frontend/dist-apresentacao/mentoria.html`: o site inteiro numa página única, com turmas, agendamento, Pix de exemplo e painel do mentor (senha `demo`), tudo rodando no navegador. Nada é cobrado e os dados ficam só no navegador de quem abre. Serve para mostrar o projeto antes de publicar a versão com servidor.
+
 ## Publicar
 
 O site precisa de um servidor Java. Por isso o GitHub Pages, que só hospeda páginas estáticas, não serve mais.

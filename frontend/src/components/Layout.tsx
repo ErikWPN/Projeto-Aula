@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useLocation } from "react-router";
 import { ToastProvider } from "./Toast";
 import { CHAVES } from "../lib/storage";
+import { MODO_APRESENTACAO } from "../lib/api";
 
 type Tema = "light" | "dark";
 
@@ -71,6 +72,11 @@ export function Layout() {
       <a className="pular" href="#conteudo">
         Pular para o conteúdo
       </a>
+      {MODO_APRESENTACAO && (
+        <p className="faixa-apresentacao">
+          Versão de apresentação: nenhum pagamento é real e os dados ficam só neste navegador.
+        </p>
+      )}
       <header className="topo">
         <div className="wrap topo__linha">
           <Link to="/" className="logo">

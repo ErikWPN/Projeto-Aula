@@ -50,6 +50,7 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
   const titulo = useRef<HTMLHeadingElement>(null);
   const caixa = useRef<HTMLDivElement>(null);
   const primeiraRenderizacao = useRef(true);
+  const caixaAviso = useRef<HTMLDivElement>(null);
 
   const turma = site.turmas.find((t) => t.id === turmaId && t.situacao === "ABERTA") ?? null;
 
@@ -71,6 +72,11 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
     caixa.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     titulo.current?.focus({ preventScroll: true });
   }, [passo]);
+
+  // O aviso fica no topo da caixa; quem clicou no botão lá embaixo precisa ver a mensagem.
+  useEffect(() => {
+    if (aviso) caixaAviso.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [aviso]);
 
   function alterar<K extends keyof Dados>(campo: K, valor: string) {
     const novo = { ...dados, [campo]: campo === "whatsapp" ? mascaraWhatsapp(valor) : valor };
@@ -109,10 +115,11 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
       void onAtualizarTurmas();
     } catch (err) {
       const erro = err instanceof ApiError ? err : new ApiError(0, "Algo deu errado. Tente de novo.");
-      if (erro.status === 409 || erro.campos.turmaId) {
+      // Só volta para a escolha de turma quando o problema é a turma (encerrada, esgotada, removida).
+      if (erro.campos.turmaId) {
         await onAtualizarTurmas();
         setTurmaId("");
-        setAviso(erro.campos.turmaId ?? erro.message);
+        setAviso(erro.campos.turmaId);
         setPasso(1);
       } else if (Object.keys(erro.campos).length) {
         setErros(erro.campos as Erros);
@@ -172,7 +179,7 @@ export function Agendamento({ site, nivelSugerido, onAtualizarTurmas }: Props) {
       </ol>
 
       {aviso && (
-        <div className="aviso aviso--erro agenda__aviso" role="alert">
+        <div className="aviso aviso--erro agenda__aviso" role="alert" ref={caixaAviso}>
           {aviso}
         </div>
       )}

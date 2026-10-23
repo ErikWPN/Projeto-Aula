@@ -34,5 +34,5 @@ Entender a TI, conhecer as áreas por dentro, experimentar antes de escolher e s
 
 ## Em aberto (decisão do dono)
 
-- **Nome "Primeiro Commit":** "commit" é termo de programação. Pode ficar como metáfora ("seu primeiro compromisso com a TI") ou ser trocado.
+- **Nome:** decidido pelo dono em 2026-10-23, **TI para Leigos**. Atenção: "Para Leigos" é marca de uma coleção de livros (versão brasileira de "For Dummies"); vale checar o uso comercial do nome.
 - **Cargo e bio do mentor:** ainda com o texto provisório.

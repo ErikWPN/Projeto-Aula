@@ -81,7 +81,7 @@ export function Layout() {
         <div className="wrap topo__linha">
           <Link to="/" className="logo">
             <Marca />
-            <span>Primeiro Commit</span>
+            <span>TI para Leigos</span>
           </Link>
           <nav aria-label="Principal" className="topo__nav">
             {naHome && (

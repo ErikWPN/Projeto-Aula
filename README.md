@@ -1,4 +1,4 @@
-# Primeiro Commit: site e reservas da mentoria
+# TI para Leigos: site e reservas da mentoria
 
 Site da mentoria para quem quer entrar na TI, está mudando de carreira ou não sabe que área escolher. Mostra as turmas, faz a reserva, gera o Pix com o valor e o código da reserva e oferece um painel para o mentor conferir pagamentos e cuidar das turmas.
 

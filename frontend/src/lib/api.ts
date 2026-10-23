@@ -34,6 +34,8 @@ export interface Site {
   demo: boolean;
   reservaHoras: number;
   mentor: { nome: string; cargo: string; bio: string; foto: string };
+  ementaTitulo: string;
+  ementaIntro: string;
   ementa: { titulo: string; topicos: string }[];
   faq: { pergunta: string; resposta: string }[];
   niveis: string[];

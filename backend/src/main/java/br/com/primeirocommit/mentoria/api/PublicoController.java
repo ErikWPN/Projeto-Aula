@@ -61,7 +61,8 @@ public class PublicoController {
                 .orElse(null);
         SiteView view = new SiteView(props.nome(), props.titulo(), props.chamada(), props.formato(), props.publico(),
                 props.whatsapp(), props.linkCartao(), props.demo(), props.reservaHoras(), props.mentor(),
-                props.ementa(), props.faq(), props.niveis(), props.origens(), lista, precoMinimo);
+                props.ementaTitulo(), props.ementaIntro(), props.ementa(), props.faq(), props.niveis(),
+                props.origens(), lista, precoMinimo);
         return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(view);
     }
 

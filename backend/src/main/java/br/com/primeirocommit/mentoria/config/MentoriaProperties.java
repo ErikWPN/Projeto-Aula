@@ -24,6 +24,8 @@ public record MentoriaProperties(
         Mentor mentor,
         Pix pix,
         Admin admin,
+        @DefaultValue("O que você vai aprender") String ementaTitulo,
+        @DefaultValue("") String ementaIntro,
         List<Encontro> ementa,
         List<Pergunta> faq,
         List<String> niveis,

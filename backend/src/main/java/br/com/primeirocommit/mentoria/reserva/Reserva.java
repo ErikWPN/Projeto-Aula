@@ -3,6 +3,7 @@ package br.com.primeirocommit.mentoria.reserva;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+import br.com.primeirocommit.mentoria.api.ApiException;
 import br.com.primeirocommit.mentoria.turma.Turma;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.springframework.http.HttpStatus;
 
 @Entity
 @Table(name = "reserva")
@@ -92,7 +94,7 @@ public class Reserva {
 
     public void confirmarPagamento(Instant agora) {
         if (status == StatusReserva.CANCELADA || status == StatusReserva.PAGA) {
-            throw new IllegalStateException("Só dá para confirmar reservas pendentes ou expiradas.");
+            throw new ApiException(HttpStatus.CONFLICT, "Só dá para confirmar reservas pendentes ou expiradas.");
         }
         status = StatusReserva.PAGA;
         pagoEm = agora;
@@ -100,7 +102,7 @@ public class Reserva {
 
     public void cancelar(Instant agora) {
         if (status == StatusReserva.CANCELADA) {
-            throw new IllegalStateException("Esta reserva já está cancelada.");
+            throw new ApiException(HttpStatus.CONFLICT, "Esta reserva já está cancelada.");
         }
         status = StatusReserva.CANCELADA;
         canceladoEm = agora;

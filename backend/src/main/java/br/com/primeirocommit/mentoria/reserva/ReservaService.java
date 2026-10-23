@@ -59,10 +59,12 @@ public class ReservaService {
         long livres = turma.getVagas() - reservas.contarOcupadas(turma.getId(), agora);
         SituacaoTurma situacao = turma.situacao(hoje(), livres);
         if (situacao == SituacaoTurma.ENCERRADA) {
-            throw new ApiException(HttpStatus.CONFLICT, "As inscrições da " + turma.getNome() + " já fecharam. Escolha outra turma.");
+            String msg = "As inscrições da " + turma.getNome() + " já fecharam. Escolha outra turma.";
+            throw new ApiException(HttpStatus.CONFLICT, msg, Map.of("turmaId", msg));
         }
         if (situacao == SituacaoTurma.ESGOTADA) {
-            throw new ApiException(HttpStatus.CONFLICT, "A última vaga da " + turma.getNome() + " acabou de ser reservada. Escolha outra turma.");
+            String msg = "A última vaga da " + turma.getNome() + " acabou de ser reservada. Escolha outra turma.";
+            throw new ApiException(HttpStatus.CONFLICT, msg, Map.of("turmaId", msg));
         }
 
         Reserva reserva = new Reserva(novoCodigo(), turma, req.nome().trim().replaceAll("\\s+", " "),

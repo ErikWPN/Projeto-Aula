@@ -235,8 +235,9 @@ export const demoApi = {
     const t = e.turmas.find((x) => x.id === d.turmaId);
     if (!t) throw new ApiError(400, "Confira os campos destacados.", { turmaId: "Essa turma não existe mais. Escolha outra." });
     const s = situacao(t, t.vagas - ocupadas(e, t.id));
-    if (s === "ENCERRADA") throw new ApiError(409, `As inscrições da ${t.nome} já fecharam. Escolha outra turma.`);
-    if (s === "ESGOTADA") throw new ApiError(409, `A última vaga da ${t.nome} acabou de ser reservada. Escolha outra turma.`);
+    const conflito = (msg: string) => new ApiError(409, msg, { turmaId: msg });
+    if (s === "ENCERRADA") throw conflito(`As inscrições da ${t.nome} já fecharam. Escolha outra turma.`);
+    if (s === "ESGOTADA") throw conflito(`A última vaga da ${t.nome} acabou de ser reservada. Escolha outra turma.`);
 
     let codigo = "";
     do {

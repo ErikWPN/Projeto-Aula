@@ -126,7 +126,7 @@ def t_passo3(page: Page):
     assert "540597.00" in pix, "valor ausente no BR Code"
     assert f"05{len(codigo):02d}{codigo}" in pix, "txid ausente"
     assert pix[-4:] == crc16(pix[:-4]), "CRC inválido"
-    expect(page.locator(".pix__qr-img svg")).to_be_visible()
+    expect(page.locator("svg.pix__qr-img")).to_be_visible()
     expect(page.locator(".pix__demo")).to_be_visible()
     href = page.get_by_role("link", name="Enviar comprovante no WhatsApp").get_attribute("href") or ""
     from urllib.parse import unquote
